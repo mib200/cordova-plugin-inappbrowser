@@ -136,6 +136,19 @@
         }
     }
 
+    // Allowing desktop view to open
+    if (browserOptions.allowinlinemediaplayback == YES) {
+        
+       self.inAppBrowserViewController.navigationDelegate = nil;
+        self.inAppBrowserViewController = nil;
+        NSString* originalUA = @"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36";
+        self.inAppBrowserViewController = [[CDVInAppBrowserViewController alloc] initWithUserAgent:originalUA prevUserAgent:[self.commandDelegate userAgent] browserOptions: browserOptions];
+        self.inAppBrowserViewController.navigationDelegate = self;
+        if ([self.viewController conformsToProtocol:@protocol(CDVScreenOrientationDelegate)]) {
+                self.inAppBrowserViewController.orientationDelegate = (UIViewController <CDVScreenOrientationDelegate>*)self.viewController;
+            }
+    }
+
     if (self.inAppBrowserViewController == nil) {
         NSString* originalUA = [CDVUserAgentUtil originalUserAgent];
         self.inAppBrowserViewController = [[CDVInAppBrowserViewController alloc] initWithUserAgent:originalUA prevUserAgent:[self.commandDelegate userAgent] browserOptions: browserOptions];
